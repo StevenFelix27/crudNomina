@@ -17,7 +17,27 @@ namespace crudNomina.Controllers
         {
             _context = context;
         }
-
+        public static bool validaCedula(string pCedula)
+        {
+            int vnTotal = 0;
+            string vcCedula = pCedula.Replace("-", "");
+            int pLongCed = vcCedula.Trim().Length;
+            int[] digitoMult = new int[11] { 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1 };
+            if (pLongCed < 11 || pLongCed > 11)
+                return false;
+            for (int vDig = 1; vDig <= pLongCed; vDig++)
+            {
+                int vCalculo = Int32.Parse(vcCedula.Substring(vDig - 1, 1)) * digitoMult[vDig - 1];
+                if (vCalculo < 10)
+                    vnTotal += vCalculo;
+                else
+                    vnTotal += Int32.Parse(vCalculo.ToString().Substring(0, 1)) + Int32.Parse(vCalculo.ToString().Substring(1, 1));
+            }
+            if (vnTotal % 10 == 0)
+                return true;
+            else
+                return false;
+        }
         // GET: Empleados
         public async Task<IActionResult> Index()
         {
@@ -55,7 +75,8 @@ namespace crudNomina.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Cedula,Nombre,Salario,IdNomina")] Empleado empleado)
         {
-            if (ModelState.IsValid)
+       
+            if (ModelState.IsValid && validaCedula(empleado.Cedula))
             {
                 _context.Add(empleado);
                 await _context.SaveChangesAsync();
