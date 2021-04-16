@@ -17,19 +17,17 @@ namespace crudNomina.Controllers
         {
             _context = context;
         }
+       
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult FilterTransactionsDate([FromForm] string startDate, [FromForm] string endDate)
+        public IActionResult Index([FromForm] DateTime? startDate, [FromForm] DateTime?  endDate)
         {
-            var year = Convert.ToDateTime(startDate);
-            var Month = Convert.ToDateTime(endDate);
-            var model = from t in _context.Transaccions
-                        where t.Fecha.Year == year.Year && t.Fecha.Month == Month.Month
-                        select t;
+            var transaccions = _context.Transaccions
+                .Include(t => t.IdDeduccionNavigation)
+                .Include(t => t.IdEmpleadoNavigation)
+                .Include(t => t.IdIngresoNavigation)
+                .Where(t => (!startDate.HasValue || t.Fecha >= startDate) && (!endDate.HasValue || t.Fecha <= endDate)).ToList();
 
-            return View("Index",model);
-   
-          
+            return View(transaccions);
         }
         // GET: Transacciones
         public async Task<IActionResult> Index()

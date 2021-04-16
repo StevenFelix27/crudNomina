@@ -5,29 +5,35 @@
 }
 
 <h1>Index</h1>
+<h4>Transaccion</h4>
+<hr />
 
-
-<form asp-controller="Transacciones" method="post" asp-action="FilterTransactionsDate" class="d-flex justify-content-between ">
+<form id="formDate" asp-controller="Transacciones" method="post" asp-action="Index" class="d-flex justify-content-between ">
     <div class="col-2"><a asp-action="Create">Create New</a></div>
     <div class="d-flex justify-content-around ">
-        <div class="col-4">
+        <div class="col-3 ">
             <label for="startDate">Fecha Desde:</label>
-            <input type="datetime-local" id="startDate" name="startDate">
+            <input class="form-control-sm" type="datetime-local" id="startDate" name="startDate">
 
         </div>
-        <div class="col-4">
+        <div class="col-3">
             <label for="endDate">Fecha Hasta:</label>
-            <input type="datetime-local" id="endDate" name="endDate">
+            <input class="form-control-sm" type="datetime-local" id="endDate" name="endDate">
 
         </div>
     </div>
-    <div class="col-2">
-        <button class="btn btn-success" type="submit" >Contabilizar</button>
-    </div>
-    
-</form>
 
-<table class="table">
+    <div class="col-2">
+        <button id="filtrar" class="btn btn-outline-primary" type="submit">Filtrar</button>
+    </div>
+
+
+
+</form>
+<div class="col-2 d-flex align-content-end" >
+    <button id="Contabilizar" class="btn btn-success">Contabilizar</button>
+</div>
+<table class="table mt-3">
     <thead>
         <tr>
             <th>
@@ -91,4 +97,5 @@
             </tr>
         }
     </tbody>
+ 
 </table>
